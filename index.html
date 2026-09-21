@@ -1,433 +1,395 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>حكيم AI — وفّر أكثر بذكاء</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        fontFamily: { tajawal: ['Tajawal', 'sans-serif'] },
-        colors: {
-          brand: { 50:'#eef4ff',100:'#dbe6ff',500:'#4f6df5',600:'#3b54d9',700:'#2c40b0',900:'#0f1440' },
-          accent: { 400:'#22d3ee',500:'#06b6d4' }
-        },
-        animation: {
-          'float':'float 6s ease-in-out infinite',
-          'glow':'glow 3s ease-in-out infinite alternate',
-          'slide-up':'slideUp .7s ease both',
-        },
-        keyframes: {
-          float:{'0%,100%':{transform:'translateY(0)'},'50%':{transform:'translateY(-12px)'}},
-          glow:{'0%':{opacity:.4},'100%':{opacity:.8}},
-          slideUp:{'0%':{opacity:0,transform:'translateY(20px)'},'100%':{opacity:1,transform:'translateY(0)'}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حكيم AI - وفّر أكثر بذكاء</title>
+    <!-- استدعاء خط Cairo من جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* إعدادات عامة */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
         }
-      }
-    }
-  }
-</script>
-<style>
-  body{font-family:'Tajawal',sans-serif;background:#070b1e;color:#e5e7eb;overflow-x:hidden}
-  .glass{background:rgba(255,255,255,0.04);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08)}
-  .card-hover{transition:all .4s cubic-bezier(.4,0,.2,1)}
-  .card-hover:hover{transform:translateY(-8px);box-shadow:0 20px 50px -10px rgba(79,109,245,.35)}
-  .ticket{position:relative;background:linear-gradient(145deg,#131a3d,#0d1230);border:1px solid rgba(255,255,255,.08);overflow:hidden}
-  .ticket::before,.ticket::after{content:'';position:absolute;width:22px;height:22px;background:#070b1e;border-radius:50%;left:-11px;top:50%;transform:translateY(-50%)}
-  .ticket::after{left:auto;right:-11px}
-  .dashed{border-top:1px dashed rgba(255,255,255,.12)}
-  .gradient-text{background:linear-gradient(135deg,#22d3ee,#4f6df5 50%,#a855f7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-  .hero-bg{background:radial-gradient(ellipse at top right,rgba(79,109,245,.25),transparent 55%),radial-gradient(ellipse at bottom left,rgba(168,85,247,.2),transparent 55%),#070b1e}
-  .chat-window{display:none}
-  .chat-window.active{display:flex;animation:slideUp .3s ease both}
-  .marquee{display:flex;animation:scroll 25s linear infinite}
-  @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-  .noise{position:absolute;inset:0;opacity:.03;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-  ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0d1230}::-webkit-scrollbar-thumb{background:#4f6df5;border-radius:3px}
-</style>
+
+        body {
+            background: linear-gradient(135deg, #0b0f19 0%, #1a1f35 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* تنسيق الشريط العلوي (Header) */
+        header {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo span {
+            color: #4f46e5; /* لون بنفسجي */
+        }
+
+        .btn-login {
+            background: linear-gradient(90deg, #4f46e5, #3b82f6);
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-login:hover {
+            opacity: 0.8;
+        }
+
+        /* القسم الرئيسي (Hero Section) */
+        .hero {
+            text-align: center;
+            max-width: 800px;
+            padding: 40px 20px;
+            margin-top: 40px;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #a1a1aa;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .badge .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #10b981;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 900;
+            line-height: 1.3;
+            margin-bottom: 20px;
+        }
+
+        h1 .highlight {
+            background: linear-gradient(90deg, #4f46e5, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            color: #a1a1aa;
+            font-size: 18px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        /* صندوق البحث */
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .search-box {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 8px;
+            transition: 0.3s;
+        }
+
+        .search-box:focus-within {
+            border-color: #4f46e5;
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.2);
+        }
+
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+        }
+
+        .search-box input::placeholder {
+            color: #52525b;
+        }
+
+        .search-btn {
+            background: linear-gradient(90deg, #4f46e5, #3b82f6);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .search-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* الإحصائيات */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 60px;
+        }
+
+        .stat-item h3 {
+            font-size: 32px;
+            font-weight: 900;
+            color: #4f46e5;
+            margin-bottom: 5px;
+        }
+
+        .stat-item p {
+            color: #a1a1aa;
+            font-size: 14px;
+        }
+
+        /* حاوية النتائج */
+        #resultsContainer {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-bottom: 50px;
+        }
+
+        /* بطاقة الكوبون */
+        .coupon-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .coupon-info h4 {
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+
+        .coupon-info p {
+            color: #a1a1aa;
+            font-size: 14px;
+        }
+
+        .coupon-code {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .code-box {
+            background: rgba(79, 70, 229, 0.1);
+            border: 1px dashed #4f46e5;
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: #4f46e5;
+            font-weight: bold;
+            font-family: monospace;
+            font-size: 16px;
+        }
+
+        .btn-copy {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .btn-copy:hover {
+            background: #3b82f6;
+        }
+
+        /* رسالة عدم وجود نتائج */
+        .no-results {
+            text-align: center;
+            color: #a1a1aa;
+            padding: 20px;
+            font-size: 16px;
+        }
+    </style>
 </head>
-<body class="antialiased">
+<body>
 
-<!-- Nav -->
-<header class="fixed top-0 inset-x-0 z-50 glass border-b border-white/5">
-  <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center shadow-lg shadow-brand-500/30">
-        <i class="fas fa-bolt text-white"></i>
-      </div>
-      <div>
-        <div class="font-black text-lg leading-none">حكيم <span class="gradient-text">AI</span></div>
-        <div class="text-[10px] text-gray-400 mt-0.5">تسوّق بذكاء</div>
-      </div>
-    </div>
-    <nav class="hidden lg:flex items-center gap-8 text-sm text-gray-300">
-      <a href="#" class="hover:text-white transition">الرئيسية</a>
-      <a href="#coupons" class="hover:text-white transition">الكوبونات</a>
-      <a href="#cars" class="hover:text-white transition">السيارات</a>
-      <a href="#" class="hover:text-white transition">المتاجر</a>
-      <a href="#" class="hover:text-white transition">اتصل بنا</a>
-    </nav>
-    <div class="flex items-center gap-3">
-      <button class="hidden sm:flex items-center gap-2 text-sm text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/5 transition">
-        <i class="fas fa-search"></i>
-      </button>
-      <button class="text-sm font-bold px-4 py-2 rounded-lg bg-gradient-to-r from-brand-500 to-accent-500 text-white shadow-lg shadow-brand-500/30 hover:shadow-brand-500/50 transition">
-        دخول
-      </button>
-    </div>
-  </div>
-</header>
-
-<!-- Hero -->
-<section class="relative hero-bg pt-32 pb-24 overflow-hidden">
-  <div class="noise"></div>
-  <div class="absolute top-20 right-10 w-72 h-72 bg-brand-500/20 rounded-full blur-3xl animate-glow"></div>
-  <div class="absolute bottom-10 left-10 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl animate-glow"></div>
-
-  <div class="max-w-7xl mx-auto px-5 relative">
-    <div class="max-w-3xl mx-auto text-center">
-      <div class="inline-flex items-center gap-2 glass px-4 py-1.5 rounded-full text-xs text-gray-300 mb-6 animate-slide-up">
-        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-        أكثر من 12,000 عرض محدّث يومياً
-      </div>
-      <h1 class="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-6 animate-slide-up">
-        وفّر أكثر <span class="gradient-text">بذكاء</span><br>مع مساعدك الشخصي
-      </h1>
-      <p class="text-lg md:text-xl text-gray-400 mb-10 animate-slide-up max-w-2xl mx-auto">
-        اكتشف أفضل الكوبونات، قارن الأسعار، واحصل على عروض حصرية في السعودية — كل ذلك في مكان واحد.
-      </p>
-      <div class="glass rounded-2xl p-2 flex items-center gap-2 max-w-2xl mx-auto animate-slide-up">
-        <i class="fas fa-search text-gray-400 pr-3"></i>
-        <input type="text" placeholder="ابحث عن متجر، منتج، أو عرض..." class="flex-1 bg-transparent text-white placeholder-gray-500 py-3 focus:outline-none text-sm">
-        <button class="px-6 py-3 rounded-xl bg-gradient-to-r from-brand-500 to-accent-500 text-white font-bold text-sm hover:opacity-90 transition whitespace-nowrap">
-          ابحث
-        </button>
-      </div>
-
-      <div class="flex flex-wrap justify-center gap-8 mt-14 text-center">
-        <div><div class="text-3xl font-black gradient-text">500+</div><div class="text-xs text-gray-400 mt-1">متجر شريك</div></div>
-        <div><div class="text-3xl font-black gradient-text">12K+</div><div class="text-xs text-gray-400 mt-1">كوبون نشط</div></div>
-        <div><div class="text-3xl font-black gradient-text">2M+</div><div class="text-xs text-gray-400 mt-1">مستخدم سعيد</div></div>
-        <div><div class="text-3xl font-black gradient-text">40%</div><div class="text-xs text-gray-400 mt-1">متوسط التوفير</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Stores marquee -->
-<section class="py-6 border-y border-white/5 bg-white/[.02] overflow-hidden">
-  <div class="marquee gap-16 items-center text-3xl text-gray-500">
-    <i class="fab fa-amazon"></i><i class="fas fa-store"></i><i class="fab fa-apple"></i>
-    <i class="fab fa-google"></i><i class="fab fa-spotify"></i><i class="fas fa-plane"></i>
-    <i class="fas fa-utensils"></i><i class="fab fa-shopify"></i>
-    <i class="fab fa-amazon"></i><i class="fas fa-store"></i><i class="fab fa-apple"></i>
-    <i class="fab fa-google"></i><i class="fab fa-spotify"></i><i class="fas fa-plane"></i>
-    <i class="fas fa-utensils"></i><i class="fab fa-shopify"></i>
-  </div>
-</section>
-
-<!-- Coupons -->
-<section id="coupons" class="py-20 px-5">
-  <div class="max-w-7xl mx-auto">
-    <div class="flex items-end justify-between mb-10">
-      <div>
-        <div class="text-xs font-bold text-accent-400 mb-2">🔥 عروض مميزة</div>
-        <h2 class="text-3xl md:text-4xl font-black">أحدث <span class="gradient-text">الكوبونات</span></h2>
-      </div>
-      <a href="#" class="text-sm text-gray-400 hover:text-white transition hidden sm:flex items-center gap-2">
-        عرض الكل <i class="fas fa-arrow-left text-xs"></i>
-      </a>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-      <!-- Ticket 1 -->
-      <div class="ticket card-hover rounded-2xl p-5">
-        <div class="flex items-start justify-between mb-4">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-white text-xl shadow-lg">
-            <i class="fas fa-store"></i>
-          </div>
-          <span class="text-[10px] font-bold px-2 py-1 rounded-full bg-green-500/20 text-green-400">حصري</span>
+    <!-- الشريط العلوي -->
+    <header>
+        <div class="logo">
+            حكيم <span>AI</span>
         </div>
-        <div class="font-black text-white mb-1">نون</div>
-        <div class="text-xs text-gray-400 mb-4">خصم 20% على الإلكترونيات</div>
-        <div class="dashed mb-4"></div>
-        <div class="flex items-center justify-between gap-2">
-          <div class="flex-1 bg-white/5 rounded-lg px-3 py-2 text-center font-mono font-bold text-accent-400 text-sm tracking-wider">NOON20</div>
-          <button onclick="copyCode('NOON20')" class="w-9 h-9 rounded-lg bg-brand-500 hover:bg-brand-600 flex items-center justify-center transition">
-            <i class="fas fa-copy text-xs text-white"></i>
-          </button>
-        </div>
-      </div>
+        <button class="btn-login">دخول</button>
+    </header>
 
-      <!-- Ticket 2 -->
-      <div class="ticket card-hover rounded-2xl p-5">
-        <div class="flex items-start justify-between mb-4">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center text-white text-xl shadow-lg">
-            <i class="fas fa-utensils"></i>
-          </div>
-          <span class="text-[10px] font-bold px-2 py-1 rounded-full bg-brand-500/20 text-brand-400">مميز</span>
+    <!-- القسم الرئيسي -->
+    <section class="hero">
+        <div class="badge">
+            <span class="dot"></span>
+            أكثر من 12,000 عرض محدّث يومياً
         </div>
-        <div class="font-black text-white mb-1">هنقرستيشن</div>
-        <div class="text-xs text-gray-400 mb-4">توصيل مجاني لأول طلب</div>
-        <div class="dashed mb-4"></div>
-        <div class="flex items-center justify-between gap-2">
-          <div class="flex-1 bg-white/5 rounded-lg px-3 py-2 text-center font-mono font-bold text-accent-400 text-sm tracking-wider">FREE15</div>
-          <button onclick="copyCode('FREE15')" class="w-9 h-9 rounded-lg bg-brand-500 hover:bg-brand-600 flex items-center justify-center transition">
-            <i class="fas fa-copy text-xs text-white"></i>
-          </button>
-        </div>
-      </div>
+        <h1>
+            وفّر أكثر <span class="highlight">بذكاء</span><br>
+            مع مساعدك الشخصي
+        </h1>
+        <p class="subtitle">
+            اكتشف أفضل الكوبونات، قارن الأسعار، واحصل على عروض حصرية في السعودية - كل ذلك في مكان واحد.
+        </p>
 
-      <!-- Ticket 3 -->
-      <div class="ticket card-hover rounded-2xl p-5">
-        <div class="flex items-start justify-between mb-4">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white text-xl shadow-lg">
-            <i class="fas fa-plane"></i>
-          </div>
-          <span class="text-[10px] font-bold px-2 py-1 rounded-full bg-purple-500/20 text-purple-400">جديد</span>
-        </div>
-        <div class="font-black text-white mb-1">فلاي ناس</div>
-        <div class="text-xs text-gray-400 mb-4">خصم 15% على الرحلات</div>
-        <div class="dashed mb-4"></div>
-        <div class="flex items-center justify-between gap-2">
-          <div class="flex-1 bg-white/5 rounded-lg px-3 py-2 text-center font-mono font-bold text-accent-400 text-sm tracking-wider">FLY15</div>
-          <button onclick="copyCode('FLY15')" class="w-9 h-9 rounded-lg bg-brand-500 hover:bg-brand-600 flex items-center justify-center transition">
-            <i class="fas fa-copy text-xs text-white"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Ticket 4 -->
-      <div class="ticket card-hover rounded-2xl p-5">
-        <div class="flex items-start justify-between mb-4">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500 to-fuchsia-600 flex items-center justify-center text-white text-xl shadow-lg">
-            <i class="fas fa-tshirt"></i>
-          </div>
-          <span class="text-[10px] font-bold px-2 py-1 rounded-full bg-pink-500/20 text-pink-400">الأكثر استخداماً</span>
-        </div>
-        <div class="font-black text-white mb-1">شي إن</div>
-        <div class="text-xs text-gray-400 mb-4">خصم 25% على الأزياء</div>
-        <div class="dashed mb-4"></div>
-        <div class="flex items-center justify-between gap-2">
-          <div class="flex-1 bg-white/5 rounded-lg px-3 py-2 text-center font-mono font-bold text-accent-400 text-sm tracking-wider">SHEIN25</div>
-          <button onclick="copyCode('SHEIN25')" class="w-9 h-9 rounded-lg bg-brand-500 hover:bg-brand-600 flex items-center justify-center transition">
-            <i class="fas fa-copy text-xs text-white"></i>
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- Cars -->
-<section id="cars" class="py-20 px-5 relative">
-  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-900/30 to-transparent pointer-events-none"></div>
-  <div class="max-w-7xl mx-auto relative">
-    <div class="flex items-end justify-between mb-10">
-      <div>
-        <div class="text-xs font-bold text-accent-400 mb-2">🚗 صفقات حصرية</div>
-        <h2 class="text-3xl md:text-4xl font-black">عروض <span class="gradient-text">السيارات</span></h2>
-      </div>
-      <a href="#" class="text-sm text-gray-400 hover:text-white transition hidden sm:flex items-center gap-2">
-        عرض الكل <i class="fas fa-arrow-left text-xs"></i>
-      </a>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-      <div class="glass rounded-2xl overflow-hidden card-hover group">
-        <div class="relative h-52 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-          <span class="absolute top-3 right-3 text-[10px] font-bold px-2 py-1 rounded-full bg-green-500 text-white">جديدة</span>
-        </div>
-        <div class="p-5">
-          <div class="font-black text-white text-lg mb-1">تويوتا كامري 2024</div>
-          <div class="flex items-center gap-2 text-xs text-gray-400 mb-4">
-            <i class="fas fa-map-marker-alt"></i> الرياض <span class="text-gray-600">•</span> 2024
-          </div>
-          <div class="flex items-center justify-between pt-4 border-t border-white/5">
-            <div>
-              <div class="text-[10px] text-gray-500">السعر</div>
-              <div class="font-black text-accent-400">120,000 <span class="text-xs">ر.س</span></div>
+        <!-- شريط البحث -->
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="ابحث عن متجر، منتج، أو عرض...">
+                <button class="search-btn">ابحث</button>
             </div>
-            <button class="text-xs font-bold px-4 py-2 rounded-lg bg-white/5 hover:bg-brand-500 transition">
-              التفاصيل
-            </button>
-          </div>
         </div>
-      </div>
 
-      <div class="glass rounded-2xl overflow-hidden card-hover group">
-        <div class="relative h-52 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-          <span class="absolute top-3 right-3 text-[10px] font-bold px-2 py-1 rounded-full bg-yellow-500 text-black">مستعملة</span>
-        </div>
-        <div class="p-5">
-          <div class="font-black text-white text-lg mb-1">هيونداي إلنترا 2023</div>
-          <div class="flex items-center gap-2 text-xs text-gray-400 mb-4">
-            <i class="fas fa-map-marker-alt"></i> جدة <span class="text-gray-600">•</span> 2023
-          </div>
-          <div class="flex items-center justify-between pt-4 border-t border-white/5">
-            <div>
-              <div class="text-[10px] text-gray-500">السعر</div>
-              <div class="font-black text-accent-400">75,000 <span class="text-xs">ر.س</span></div>
+        <!-- الإحصائيات -->
+        <div class="stats">
+            <div class="stat-item">
+                <h3>+2M</h3>
+                <p>مستخدم سعيد</p>
             </div>
-            <button class="text-xs font-bold px-4 py-2 rounded-lg bg-white/5 hover:bg-brand-500 transition">
-              التفاصيل
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="glass rounded-2xl overflow-hidden card-hover group">
-        <div class="relative h-52 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-          <span class="absolute top-3 right-3 text-[10px] font-bold px-2 py-1 rounded-full bg-yellow-500 text-black">مستعملة</span>
-        </div>
-        <div class="p-5">
-          <div class="font-black text-white text-lg mb-1">فورد توروس 2022</div>
-          <div class="flex items-center gap-2 text-xs text-gray-400 mb-4">
-            <i class="fas fa-map-marker-alt"></i> الدمام <span class="text-gray-600">•</span> 2022
-          </div>
-          <div class="flex items-center justify-between pt-4 border-t border-white/5">
-            <div>
-              <div class="text-[10px] text-gray-500">السعر</div>
-              <div class="font-black text-accent-400">95,000 <span class="text-xs">ر.س</span></div>
+            <div class="stat-item">
+                <h3>+12K</h3>
+                <p>كوبون نشط</p>
             </div>
-            <button class="text-xs font-bold px-4 py-2 rounded-lg bg-white/5 hover:bg-brand-500 transition">
-              التفاصيل
-            </button>
-          </div>
+            <div class="stat-item">
+                <h3>+500</h3>
+                <p>متجر شريك</p>
+            </div>
         </div>
-      </div>
+    </section>
 
-    </div>
-  </div>
-</section>
+    <!-- حاوية عرض النتائج -->
+    <div id="resultsContainer"></div>
 
-<!-- CTA -->
-<section class="py-20 px-5">
-  <div class="max-w-5xl mx-auto rounded-3xl p-10 md:p-16 text-center relative overflow-hidden glass">
-    <div class="absolute top-0 right-0 w-64 h-64 bg-brand-500/30 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-0 left-0 w-64 h-64 bg-accent-500/20 rounded-full blur-3xl"></div>
-    <div class="relative">
-      <i class="fas fa-bell text-4xl gradient-text mb-4"></i>
-      <h3 class="text-3xl md:text-4xl font-black mb-4">لا تفوّت أي عرض مرة أخرى</h3>
-      <p class="text-gray-400 mb-8 max-w-lg mx-auto">اشترك في التنبيهات واحصل على أفضل العروض مباشرة إلى بريدك.</p>
-      <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-        <input type="email" placeholder="بريدك الإلكتروني" class="flex-1 glass rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-        <button class="px-6 py-3 rounded-xl bg-gradient-to-r from-brand-500 to-accent-500 text-white font-bold text-sm hover:opacity-90 transition">
-          اشترك الآن
-        </button>
-      </div>
-    </div>
-  </div>
-</section>
+    <!-- كود الجافاسكريبت -->
+    <script>
+        // 1. بيانات تجريبية للكوبونات (يمكنك إضافة المزيد هنا)
+        const coupons = [
+            { id: 1, store: "نون", discount: "خصم 15% على الإلكترونيات", code: "NOON15" },
+            { id: 2, store: "أمازون", discount: "خصم 10% للعملاء الجدد", code: "AMZ10" },
+            { id: 3, store: "جرير", discount: "توصيل مجاني للطلبات فوق 200 ريال", code: "JARIR" },
+            { id: 4, store: "نون", discount: "خصم 20% على الأزياء", code: "FASHION20" },
+            { id: 5, store: "إكسترا", discount: "خصم 50 ريال عند الشراء بـ 500 ريال", code: "EXTRA50" },
+            { id: 6, store: "أمازون", discount: "خصم 5% على البقالة", code: "GROCERY5" }
+        ];
 
-<!-- Footer -->
-<footer class="border-t border-white/5 py-12 px-5">
-  <div class="max-w-7xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-      <div class="md:col-span-2">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center">
-            <i class="fas fa-bolt text-white"></i>
-          </div>
-          <div class="font-black text-lg">حكيم <span class="gradient-text">AI</span></div>
-        </div>
-        <p class="text-sm text-gray-400 max-w-sm">منصتك الذكية لاكتشاف أفضل العروض والكوبونات في السعودية والخليج.</p>
-      </div>
-      <div>
-        <div class="font-bold mb-4 text-sm">روابط سريعة</div>
-        <ul class="space-y-2 text-sm text-gray-400">
-          <li><a href="#" class="hover:text-accent-400 transition">الرئيسية</a></li>
-          <li><a href="#coupons" class="hover:text-accent-400 transition">الكوبونات</a></li>
-          <li><a href="#cars" class="hover:text-accent-400 transition">السيارات</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="font-bold mb-4 text-sm">تابعنا</div>
-        <div class="flex gap-3">
-          <a href="#" class="w-9 h-9 rounded-lg glass flex items-center justify-center hover:bg-brand-500 transition"><i class="fab fa-twitter text-sm"></i></a>
-          <a href="#" class="w-9 h-9 rounded-lg glass flex items-center justify-center hover:bg-brand-500 transition"><i class="fab fa-instagram text-sm"></i></a>
-          <a href="#" class="w-9 h-9 rounded-lg glass flex items-center justify-center hover:bg-brand-500 transition"><i class="fab fa-whatsapp text-sm"></i></a>
-          <a href="#" class="w-9 h-9 rounded-lg glass flex items-center justify-center hover:bg-brand-500 transition"><i class="fab fa-tiktok text-sm"></i></a>
-        </div>
-      </div>
-    </div>
-    <div class="pt-6 border-t border-white/5 text-center text-xs text-gray-500">
-      © 2025 حكيم AI — جميع الحقوق محفوظة
-    </div>
-  </div>
-</footer>
+        // 2. جلب العناصر من الصفحة
+        const searchInput = document.getElementById('searchInput');
+        const resultsContainer = document.getElementById('resultsContainer');
 
-<!-- AI Chat -->
-<div class="fixed bottom-6 left-6 z-50">
-  <button onclick="toggleChat()" class="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 shadow-2xl shadow-brand-500/40 flex items-center justify-center hover:scale-105 transition">
-    <i class="fas fa-comment-dots text-white text-xl"></i>
-    <span class="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-[#070b1e]"></span>
-  </button>
-  <div id="chatWindow" class="chat-window absolute bottom-20 left-0 w-80 md:w-96 glass rounded-2xl overflow-hidden shadow-2xl flex-col">
-    <div class="p-4 bg-gradient-to-r from-brand-500 to-accent-500 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-          <i class="fas fa-robot text-white text-sm"></i>
-        </div>
-        <div>
-          <div class="font-bold text-white text-sm">مساعد حكيم AI</div>
-          <div class="text-[10px] text-white/70 flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-300 rounded-full"></span>متصل الآن</div>
-        </div>
-      </div>
-      <button onclick="toggleChat()" class="text-white/80 hover:text-white"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="p-4 h-72 overflow-y-auto space-y-3">
-      <div class="flex gap-2">
-        <div class="w-7 h-7 rounded-full bg-brand-500 flex items-center justify-center shrink-0"><i class="fas fa-robot text-white text-[10px]"></i></div>
-        <div class="bg-white/5 rounded-2xl rounded-tr-sm px-3 py-2 text-sm max-w-[80%]">مرحباً! 👋 كيف يمكنني مساعدتك في العثور على أفضل العروض اليوم؟</div>
-      </div>
-      <div class="flex gap-2 flex-row-reverse">
-        <div class="bg-gradient-to-r from-brand-500 to-accent-500 rounded-2xl rounded-tl-sm px-3 py-2 text-sm max-w-[80%] text-white">أبحث عن كوبونات مطاعم</div>
-      </div>
-      <div class="flex gap-2">
-        <div class="w-7 h-7 rounded-full bg-brand-500 flex items-center justify-center shrink-0"><i class="fas fa-robot text-white text-[10px]"></i></div>
-        <div class="bg-white/5 rounded-2xl rounded-tr-sm px-3 py-2 text-sm max-w-[80%]">ممتاز! لدي 42 كوبون مطاعم نشط الآن، أفضلهم خصم 30% من هنقرستيشن 🍔</div>
-      </div>
-    </div>
-    <div class="p-3 border-t border-white/5 flex gap-2">
-      <input type="text" placeholder="اكتب رسالتك..." class="flex-1 bg-white/5 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-      <button class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center hover:opacity-90 transition">
-        <i class="fas fa-paper-plane text-white text-xs"></i>
-      </button>
-    </div>
-  </div>
-</div>
+        // 3. دالة عرض النتائج
+        function displayResults(data) {
+            resultsContainer.innerHTML = ''; // تفريغ الحاوية أولاً
 
-<script>
-  function copyCode(code){
-    navigator.clipboard.writeText(code).then(()=>{
-      const t = document.createElement('div');
-      t.textContent = '✓ تم نسخ: ' + code;
-      t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#4f6df5;color:#fff;padding:12px 24px;border-radius:12px;font-size:14px;z-index:9999;box-shadow:0 10px 30px rgba(79,109,245,.4);font-family:Tajawal';
-      document.body.appendChild(t);
-      setTimeout(()=>t.remove(),2000);
-    });
-  }
-  function toggleChat(){ document.getElementById('chatWindow').classList.toggle('active'); }
-  // Smooth scroll
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click',e=>{
-      const t = document.querySelector(a.getAttribute('href'));
-      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
-    });
-  });
-</script>
+            if (data.length === 0) {
+                resultsContainer.innerHTML = '<div class="no-results">لا توجد نتائج مطابقة لبحثك 😔</div>';
+                return;
+            }
+
+            // إنشاء بطاقة لكل كوبون
+            data.forEach(coupon => {
+                const card = document.createElement('div');
+                card.className = 'coupon-card';
+                card.innerHTML = `
+                    <div class="coupon-info">
+                        <h4>${coupon.store}</h4>
+                        <p>${coupon.discount}</p>
+                    </div>
+                    <div class="coupon-code">
+                        <div class="code-box">${coupon.code}</div>
+                        <button class="btn-copy" onclick="copyCode('${coupon.code}', this)">نسخ</button>
+                    </div>
+                `;
+                resultsContainer.appendChild(card);
+            });
+        }
+
+        // 4. دالة نسخ الكود
+        function copyCode(code, btn) {
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'تم النسخ!';
+                btn.style.background = '#10b981'; // لون أخضر
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = '#4f46e5'; // العودة للون الأصلي
+                }, 2000);
+            });
+        }
+
+        // 5. مستمع الحدث للبحث
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            
+            // إذا كان البحث فارغاً، امسح النتائج
+            if (searchTerm === '') {
+                resultsContainer.innerHTML = '';
+                return;
+            }
+
+            // فلترة الكوبونات بناءً على اسم المتجر أو الوصف
+            const filteredCoupons = coupons.filter(coupon => 
+                coupon.store.toLowerCase().includes(searchTerm) || 
+                coupon.discount.toLowerCase().includes(searchTerm)
+            );
+
+            displayResults(filteredCoupons);
+        });
+    </script>
+
 </body>
 </html>
