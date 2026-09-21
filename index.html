@@ -1,395 +1,796 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حكيم AI - وفّر أكثر بذكاء</title>
-    <!-- استدعاء خط Cairo من جوجل -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-    
-    <style>
-        /* إعدادات عامة */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #0b0f19 0%, #1a1f35 100%);
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* تنسيق الشريط العلوي (Header) */
-        header {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 900;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logo span {
-            color: #4f46e5; /* لون بنفسجي */
-        }
-
-        .btn-login {
-            background: linear-gradient(90deg, #4f46e5, #3b82f6);
-            color: white;
-            border: none;
-            padding: 8px 24px;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-login:hover {
-            opacity: 0.8;
-        }
-
-        /* القسم الرئيسي (Hero Section) */
-        .hero {
-            text-align: center;
-            max-width: 800px;
-            padding: 40px 20px;
-            margin-top: 40px;
-        }
-
-        .badge {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            color: #a1a1aa;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-
-        .badge .dot {
-            width: 8px;
-            height: 8px;
-            background-color: #10b981;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #10b981;
-        }
-
-        h1 {
-            font-size: 48px;
-            font-weight: 900;
-            line-height: 1.3;
-            margin-bottom: 20px;
-        }
-
-        h1 .highlight {
-            background: linear-gradient(90deg, #4f46e5, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        p.subtitle {
-            color: #a1a1aa;
-            font-size: 18px;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        /* صندوق البحث */
-        .search-container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto 40px;
-            position: relative;
-        }
-
-        .search-box {
-            display: flex;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 8px;
-            transition: 0.3s;
-        }
-
-        .search-box:focus-within {
-            border-color: #4f46e5;
-            box-shadow: 0 0 20px rgba(79, 70, 229, 0.2);
-        }
-
-        .search-box input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: white;
-            padding: 12px 20px;
-            font-size: 16px;
-        }
-
-        .search-box input::placeholder {
-            color: #52525b;
-        }
-
-        .search-btn {
-            background: linear-gradient(90deg, #4f46e5, #3b82f6);
-            color: white;
-            border: none;
-            padding: 12px 32px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .search-btn:hover {
-            opacity: 0.9;
-        }
-
-        /* الإحصائيات */
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 60px;
-            margin-top: 60px;
-        }
-
-        .stat-item h3 {
-            font-size: 32px;
-            font-weight: 900;
-            color: #4f46e5;
-            margin-bottom: 5px;
-        }
-
-        .stat-item p {
-            color: #a1a1aa;
-            font-size: 14px;
-        }
-
-        /* حاوية النتائج */
-        #resultsContainer {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            padding-bottom: 50px;
-        }
-
-        /* بطاقة الكوبون */
-        .coupon-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            animation: fadeIn 0.4s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .coupon-info h4 {
-            font-size: 18px;
-            margin-bottom: 6px;
-        }
-
-        .coupon-info p {
-            color: #a1a1aa;
-            font-size: 14px;
-        }
-
-        .coupon-code {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .code-box {
-            background: rgba(79, 70, 229, 0.1);
-            border: 1px dashed #4f46e5;
-            padding: 8px 16px;
-            border-radius: 8px;
-            color: #4f46e5;
-            font-weight: bold;
-            font-family: monospace;
-            font-size: 16px;
-        }
-
-        .btn-copy {
-            background: #4f46e5;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-
-        .btn-copy:hover {
-            background: #3b82f6;
-        }
-
-        /* رسالة عدم وجود نتائج */
-        .no-results {
-            text-align: center;
-            color: #a1a1aa;
-            padding: 20px;
-            font-size: 16px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>HkeeemAI — تسوّق ذكي.. توفير أكثر</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --gold-1:#d4a017;
+  --gold-2:#facc15;
+  --gold-3:#8b6914;
+  --gold-light:#fde68a;
+  --bg:#0a0805;
+  --bg-2:#131008;
+  --card:rgba(212,160,23,0.05);
+  --card-border:rgba(212,160,23,0.15);
+  --text:#f5f0e0;
+  --text-dim:#a89570;
+  --radius:24px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);margin:0;overflow-x:hidden;padding-bottom:90px;-webkit-font-smoothing:antialiased}
+.gold-gradient{background:linear-gradient(135deg,#fde68a 0%,#d4a017 50%,#8b6914 100%)}
+.gold-text{background:linear-gradient(135deg,#fde68a 0%,#facc15 40%,#d4a017 70%,#8b6914 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.metal-bg{background:linear-gradient(135deg,#fef3c7 0%,#facc15 15%,#d4a017 40%,#78350f 60%,#d4a017 80%,#fde68a 100%)}
+.glass{background:rgba(212,160,23,0.06);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(212,160,23,0.15)}
+.card{background:linear-gradient(145deg,rgba(20,16,8,0.95),rgba(10,8,5,0.95));border:1px solid rgba(212,160,23,0.12);border-radius:var(--radius);transition:all .3s ease;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,160,23,0.3),transparent)}
+.card-glow{box-shadow:0 0 40px -10px rgba(212,160,23,0.3)}
+.tab{display:none}
+.tab.active{display:block;animation:fadeIn .4s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.shimmer{background:linear-gradient(90deg,transparent,rgba(253,230,138,0.3),transparent);background-size:200% 100%;animation:shimmer 3s infinite}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(212,160,23,0.5)}100%{box-shadow:0 0 0 20px rgba(212,160,23,0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.float{animation:float 4s ease-in-out infinite}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0;color:var(--text-dim);font-size:9px;font-weight:600;cursor:pointer;transition:.25s;position:relative}
+.nav-item.active{color:var(--gold-2)}
+.nav-item.active::before{content:'';position:absolute;top:0;width:24px;height:3px;border-radius:0 0 6px 6px;background:linear-gradient(90deg,var(--gold-3),var(--gold-2),var(--gold-3))}
+.nav-item i{font-size:20px;transition:.25s}
+.nav-item.active i{transform:scale(1.1);filter:drop-shadow(0 0 10px rgba(250,204,21,0.7))}
+.chip{padding:8px 16px;border-radius:100px;font-size:12px;font-weight:700;border:1px solid rgba(212,160,23,0.2);background:rgba(212,160,23,0.06);color:var(--text-dim);cursor:pointer;transition:.25s;white-space:nowrap}
+.chip.active,.chip:active{background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#1a1305;border-color:transparent}
+.search-bar{background:linear-gradient(145deg,#fefce8,#fef3c7);border-radius:100px;padding:6px 6px 6px 16px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 30px -5px rgba(212,160,23,0.4),inset 0 1px 0 rgba(255,255,255,0.8)}
+.search-bar input{background:transparent;border:none;outline:none;flex:1;font-family:inherit;font-size:14px;color:#1a1305;font-weight:500}
+.search-bar input::placeholder{color:#78716c}
+.store-card{background:linear-gradient(145deg,rgba(20,16,8,0.9),rgba(10,8,5,0.9));border:1px solid rgba(212,160,23,0.15);border-radius:20px;padding:16px;text-align:center;cursor:pointer;transition:.3s;position:relative;overflow:hidden}
+.store-card:hover,.store-card:active{transform:translateY(-4px);border-color:rgba(212,160,23,0.4);box-shadow:0 20px 40px -15px rgba(212,160,23,0.4)}
+.store-letter{width:52px;height:52px;margin:0 auto 10px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#1a1305;position:relative}
+.menu-item{display:flex;align-items:center;gap:14px;padding:16px;border-bottom:1px solid rgba(212,160,23,0.08);cursor:pointer;transition:.2s}
+.menu-item:active{background:rgba(212,160,23,0.05)}
+.menu-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:rgba(212,160,23,0.1);border:1px solid rgba(212,160,23,0.2)}
+.side-menu{position:fixed;top:0;right:0;bottom:0;width:85%;max-width:360px;background:linear-gradient(180deg,#0f0c06,#070503);z-index:100;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);overflow-y:auto;border-left:1px solid rgba(212,160,23,0.2)}
+.side-menu.open{transform:translateX(0)}
+.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:99;opacity:0;pointer-events:none;transition:.3s}
+.menu-overlay.open{opacity:1;pointer-events:auto}
+.color-option{width:44px;height:44px;border-radius:14px;cursor:pointer;border:2px solid transparent;transition:.25s;position:relative}
+.color-option.active{border-color:var(--gold-2);transform:scale(1.08)}
+.color-option.active::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px;text-shadow:0 2px 4px rgba(0,0,0,0.5)}
+.glow-dot{width:8px;height:8px;border-radius:50%;background:var(--gold-2);box-shadow:0 0 12px var(--gold-2);animation:pulse-ring 2s infinite}
+.offer-card{background:linear-gradient(145deg,rgba(20,16,8,0.95),rgba(10,8,5,0.95));border:1px solid rgba(212,160,23,0.12);border-radius:22px;overflow:hidden;transition:.3s}
+.offer-card:active{transform:scale(.98)}
+.stat-card{background:linear-gradient(145deg,rgba(212,160,23,0.15),rgba(212,160,23,0.03));border:1px solid rgba(212,160,23,0.2);border-radius:20px;padding:16px;text-align:center;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(250,204,21,0.1),transparent);animation:rotate 6s linear infinite}
+@keyframes rotate{100%{transform:rotate(360deg)}}
+input,select,textarea{font-family:inherit;outline:none}
+::-webkit-scrollbar{width:0;height:0}
+.badge{font-size:9px;font-weight:800;padding:3px 8px;border-radius:100px;letter-spacing:.3px}
+.badge-new{background:rgba(212,160,23,0.2);color:var(--gold-2);border:1px solid rgba(212,160,23,0.3)}
+</style>
 </head>
 <body>
 
-    <!-- الشريط العلوي -->
-    <header>
-        <div class="logo">
-            حكيم <span>AI</span>
+<!-- Side Menu Overlay -->
+<div id="menuOverlay" class="menu-overlay" onclick="closeMenu()"></div>
+
+<!-- Side Menu -->
+<aside id="sideMenu" class="side-menu">
+  <div class="p-5 border-b border-white/5">
+    <div class="flex items-center justify-between mb-5">
+      <button onclick="closeMenu()" class="w-10 h-10 rounded-xl glass flex items-center justify-center">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-xl metal-bg flex items-center justify-center">
+          <span class="text-lg font-black" style="color:#1a1305">H</span>
         </div>
-        <button class="btn-login">دخول</button>
-    </header>
+        <span class="font-black text-lg gold-text">HkeeemAI</span>
+      </div>
+    </div>
 
-    <!-- القسم الرئيسي -->
-    <section class="hero">
-        <div class="badge">
-            <span class="dot"></span>
-            أكثر من 12,000 عرض محدّث يومياً
+    <!-- Theme selector -->
+    <div class="glass rounded-2xl p-4 mb-4">
+      <div class="text-xs font-bold mb-3 flex items-center justify-between">
+        <span class="gold-text">لون الثيم</span>
+        <i class="fas fa-check-circle" style="color:var(--gold-2)"></i>
+      </div>
+      <div class="flex gap-3 justify-center">
+        <div class="color-option metal-bg active" onclick="setTheme('gold',this)" title="ذهبي"></div>
+        <div class="color-option active" style="background:linear-gradient(135deg,#e5e7eb,#6b7280,#1f2937)" onclick="setTheme('silver',this)" title="فضي"></div>
+        <div class="color-option active" style="background:linear-gradient(135deg,#fbbf24,#b45309,#78350f)" onclick="setTheme('bronze',this)" title="برونزي"></div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="py-2">
+    <div class="menu-item" onclick="showToast('قريباً');closeMenu()">
+      <div class="menu-icon"><i class="fas fa-ticket-alt" style="color:var(--gold-2)"></i></div>
+      <span class="flex-1 font-bold text-sm">الكوبونات</span>
+      <i class="fas fa-chevron-left text-xs" style="color:var(--text-dim)"></i>
+    </div>
+    <div class="menu-item" onclick="showToast('قريباً');closeMenu()">
+      <div class="menu-icon"><i class="fas fa-store" style="color:var(--gold-2)"></i></div>
+      <span class="flex-1 font-bold text-sm">بوابة التاجر</span>
+      <span class="badge badge-new">جديد</span>
+      <i class="fas fa-chevron-left text-xs" style="color:var(--text-dim)"></i>
+    </div>
+    <div class="menu-item" onclick="showToast('قريباً');closeMenu()">
+      <div class="menu-icon"><i class="fas fa-car" style="color:var(--gold-2)"></i></div>
+      <span class="flex-1 font-bold text-sm">السيارات</span>
+      <span class="badge badge-new">جديد</span>
+      <i class="fas fa-chevron-left text-xs" style="color:var(--text-dim)"></i>
+    </div>
+    <div class="menu-item" onclick="showToast('قريباً');closeMenu()">
+      <div class="menu-icon"><i class="fas fa-images" style="color:var(--gold-2)"></i></div>
+      <span class="flex-1 font-bold text-sm">معرض حكيم AI</span>
+      <i class="fas fa-chevron-down text-xs" style="color:var(--text-dim)"></i>
+    </div>
+    <div class="menu-item" onclick="showToast('قريباً');closeMenu()">
+      <div class="menu-icon"><i class="fas fa-building" style="color:var(--gold-2)"></i></div>
+      <span class="flex-1 font-bold text-sm">مكتب حكيم AI</span>
+      <i class="fas fa-chevron-down text-xs" style="color:var(--text-dim)"></i>
+    </div>
+    <div class="menu-item" onclick="showToast('قريباً');closeMenu()">
+      <div class="menu-icon"><i class="fas fa-brain" style="color:var(--gold-2)"></i></div>
+      <span class="flex-1 font-bold text-sm">ذكاء حكيم AI</span>
+      <i class="fas fa-chevron-down text-xs" style="color:var(--text-dim)"></i>
+    </div>
+    <div class="menu-item" onclick="showToast('قريباً');closeMenu()">
+      <div class="menu-icon"><i class="fas fa-bullhorn" style="color:var(--gold-2)"></i></div>
+      <span class="flex-1 font-bold text-sm">عروض السوشال ميديا</span>
+      <i class="fas fa-chevron-left text-xs" style="color:var(--text-dim)"></i>
+    </div>
+  </nav>
+
+  <div class="p-5 mt-4">
+    <div class="glass rounded-2xl p-5 text-center">
+      <p class="text-xs leading-relaxed mb-4" style="color:var(--text-dim)">
+        يسعدنا استقبال طلباتكم وعروضكم عبر رابط مكتبي العقاري، وسنقوم بخدمتكم في أقرب فرصة
+      </p>
+      <p class="text-[10px] font-bold mb-4 gold-text">(مؤسسة محسن لخدمات الأعمال)</p>
+      <button class="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#1a1305">
+        <i class="fas fa-external-link-alt text-xs"></i>
+        <span>زيارة المكتب العقاري</span>
+      </button>
+    </div>
+    <div class="text-center text-[10px] mt-6" style="color:var(--text-dim)">HkeeemAI © 2025</div>
+  </div>
+</aside>
+
+<!-- Top Header -->
+<header class="sticky top-0 z-40" style="background:linear-gradient(180deg,rgba(10,8,5,0.98),rgba(10,8,5,0.85));backdrop-filter:blur(20px)">
+  <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
+    <button onclick="openMenu()" class="w-10 h-10 rounded-xl glass flex items-center justify-center">
+      <i class="fas fa-bars text-sm" style="color:var(--gold-2)"></i>
+    </button>
+    <div class="flex items-center gap-2">
+      <span class="font-black text-lg gold-text">HkeeemAI</span>
+      <div class="w-10 h-10 rounded-xl metal-bg flex items-center justify-center" style="box-shadow:0 0 20px rgba(212,160,23,0.4)">
+        <span class="text-xl font-black" style="color:#1a1305">H</span>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button class="w-10 h-10 rounded-xl glass flex items-center justify-center">
+        <span class="text-[10px] font-bold gold-text">EN</span>
+      </button>
+      <button class="w-10 h-10 rounded-xl glass flex items-center justify-center">
+        <i class="fas fa-sign-in-alt text-sm" style="color:var(--gold-2)"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Location bar -->
+  <div class="max-w-md mx-auto px-4 pb-3 flex items-center gap-2 overflow-x-auto">
+    <button class="glass rounded-full px-3 py-2 flex items-center gap-1.5 shrink-0">
+      <i class="fas fa-city text-xs" style="color:var(--gold-2)"></i>
+      <span class="text-xs font-bold">هايبر ماركت</span>
+    </button>
+    <button class="rounded-full px-4 py-2 flex items-center gap-1.5 shrink-0" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2))">
+      <span class="text-xs font-bold" style="color:#1a1305">كافة المتاجر</span>
+      <i class="fas fa-star text-xs" style="color:#1a1305"></i>
+    </button>
+    <button class="glass rounded-full px-3 py-2 flex items-center gap-1.5 shrink-0">
+      <i class="fas fa-map-marker-alt text-xs" style="color:var(--gold-2)"></i>
+      <div class="text-right leading-tight">
+        <div class="text-[11px] font-bold">جدة</div>
+        <div class="text-[9px]" style="color:var(--text-dim)">14 متجر</div>
+      </div>
+    </button>
+  </div>
+</header>
+
+<!-- ================= HOME TAB ================= -->
+<main id="tab-home" class="tab active">
+  <!-- Hero Card -->
+  <section class="px-4 py-4">
+    <div class="max-w-md mx-auto">
+      <div class="rounded-3xl p-6 relative overflow-hidden" style="background:linear-gradient(160deg,#1a1305 0%,#2a1e08 30%,#4a3510 60%,#1a1305 100%)">
+        <div class="absolute top-0 right-0 w-64 h-64 rounded-full" style="background:radial-gradient(circle,rgba(212,160,23,0.25),transparent 70%)"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full" style="background:radial-gradient(circle,rgba(250,204,21,0.15),transparent 70%)"></div>
+
+        <div class="relative">
+          <!-- Logo -->
+          <div class="flex justify-start mb-3">
+            <div class="w-20 h-20 rounded-2xl metal-bg flex items-center justify-center float" style="box-shadow:0 10px 40px rgba(212,160,23,0.5),inset 0 2px 0 rgba(255,255,255,0.3)">
+              <span class="text-4xl font-black" style="color:#1a1305;text-shadow:0 2px 4px rgba(255,255,255,0.3)">H</span>
+            </div>
+          </div>
+
+          <!-- Badge -->
+          <div class="inline-flex items-center gap-2 glass rounded-full px-3 py-1.5 mb-4">
+            <i class="fas fa-sparkles text-xs" style="color:var(--gold-2)"></i>
+            <span class="text-[11px] font-bold">HkeeemAI — وفّر أكثر... لا تدفع أكثر</span>
+          </div>
+
+          <!-- Title -->
+          <h1 class="text-4xl font-black leading-[1.15] mb-4">
+            تسوّق <span class="gold-text">ذكي...</span><br>
+            <span class="gold-text">توفير أكثر</span>
+          </h1>
+
+          <p class="text-sm leading-relaxed mb-6" style="color:var(--text-dim)">
+            نجمع كل العروض ونقارن الأسعار بين المتاجر لحظيًا — حتى تشتري نفس المنتج بأرخص سعر. مصلحتك أنت أولاً، لا المتجر.
+          </p>
+
+          <!-- Smart Search -->
+          <div class="search-bar mb-4">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2))">
+              <i class="fas fa-search text-sm" style="color:#1a1305"></i>
+            </div>
+            <input type="text" placeholder="اسأل حكيم: مثلاً «أرخص أرز بسمتي»">
+            <i class="fas fa-sparkles text-sm pr-3" style="color:var(--gold-1)"></i>
+          </div>
+
+          <!-- Quick chips -->
+          <div class="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+            <button class="chip" onclick="quickSearch('أرز بسمتي')">أرز بسمتي</button>
+            <button class="chip" onclick="quickSearch('زيت دوار الشمس')">زيت دوار الشمس</button>
+            <button class="chip" onclick="quickSearch('iPhone 16')">iPhone 16</button>
+            <button class="chip" onclick="quickSearch('عروض الدهدي')">عروض الدهدي</button>
+          </div>
         </div>
-        <h1>
-            وفّر أكثر <span class="highlight">بذكاء</span><br>
-            مع مساعدك الشخصي
-        </h1>
-        <p class="subtitle">
-            اكتشف أفضل الكوبونات، قارن الأسعار، واحصل على عروض حصرية في السعودية - كل ذلك في مكان واحد.
-        </p>
+      </div>
+    </div>
+  </section>
 
-        <!-- شريط البحث -->
-        <div class="search-container">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="ابحث عن متجر، منتج، أو عرض...">
-                <button class="search-btn">ابحث</button>
+  <!-- Stats -->
+  <section class="px-4 pb-4">
+    <div class="max-w-md mx-auto grid grid-cols-2 gap-3">
+      <div class="stat-card">
+        <div class="relative">
+          <div class="text-3xl font-black gold-text mb-1">+65</div>
+          <div class="text-xs" style="color:var(--text-dim)">متجر</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="relative">
+          <div class="text-3xl font-black gold-text mb-1">60%</div>
+          <div class="text-xs" style="color:var(--text-dim)">متوسط التوفير</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Offers -->
+  <section class="px-4 pb-6">
+    <div class="max-w-md mx-auto">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-lg font-black">عروض مميزة</h2>
+          <p class="text-[11px]" style="color:var(--text-dim)">الأكثر توفيراً اليوم</p>
+        </div>
+        <button class="text-xs font-bold" style="color:var(--gold-2)" onclick="switchTab('offers')">عرض الكل ←</button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="offer-card p-4 flex items-center gap-3">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,#fef3c7,#fcd34d)">
+            <i class="fas fa-drumstick-bite text-2xl" style="color:#78350f"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-sm mb-1">أرز بسمتي فاخر 5 كجم</div>
+            <div class="text-[10px] mb-1" style="color:var(--text-dim)">كارفور جدة</div>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] flex items-center gap-1" style="color:var(--gold-2)"><i class="fas fa-star"></i>4.8</span>
+              <span class="text-[10px]" style="color:var(--text-dim)">• 2100 استخدام</span>
             </div>
+          </div>
+          <div class="text-left shrink-0">
+            <div class="text-[10px] line-through" style="color:var(--text-dim)">85 ر.س</div>
+            <div class="font-black text-base gold-text">49 ر.س</div>
+            <span class="badge badge-new mt-1 inline-block">وفّر 42%</span>
+          </div>
         </div>
 
-        <!-- الإحصائيات -->
-        <div class="stats">
-            <div class="stat-item">
-                <h3>+2M</h3>
-                <p>مستخدم سعيد</p>
+        <div class="offer-card p-4 flex items-center gap-3">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,#fef9c3,#fde047)">
+            <i class="fas fa-wine-bottle text-2xl" style="color:#78350f"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-sm mb-1">زيت دوار الشمس 1.5 لتر</div>
+            <div class="text-[10px] mb-1" style="color:var(--text-dim)">بنده جدة</div>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] flex items-center gap-1" style="color:var(--gold-2)"><i class="fas fa-star"></i>4.6</span>
+              <span class="text-[10px]" style="color:var(--text-dim)">• 1420 استخدام</span>
             </div>
-            <div class="stat-item">
-                <h3>+12K</h3>
-                <p>كوبون نشط</p>
-            </div>
-            <div class="stat-item">
-                <h3>+500</h3>
-                <p>متجر شريك</p>
-            </div>
+          </div>
+          <div class="text-left shrink-0">
+            <div class="text-[10px] line-through" style="color:var(--text-dim)">42 ر.س</div>
+            <div class="font-black text-base gold-text">27 ر.س</div>
+            <span class="badge badge-new mt-1 inline-block">وفّر 36%</span>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
+</main>
 
-    <!-- حاوية عرض النتائج -->
-    <div id="resultsContainer"></div>
+<!-- ================= OFFERS TAB ================= -->
+<main id="tab-offers" class="tab">
+  <section class="px-4 py-4">
+    <div class="max-w-md mx-auto">
+      <h2 class="text-xl font-black mb-1">العروض</h2>
+      <p class="text-xs mb-4" style="color:var(--text-dim)">محدّثة تلقائياً من المتاجر الرسمية</p>
 
-    <!-- كود الجافاسكريبت -->
-    <script>
-        // 1. بيانات تجريبية للكوبونات (يمكنك إضافة المزيد هنا)
-        const coupons = [
-            { id: 1, store: "نون", discount: "خصم 15% على الإلكترونيات", code: "NOON15" },
-            { id: 2, store: "أمازون", discount: "خصم 10% للعملاء الجدد", code: "AMZ10" },
-            { id: 3, store: "جرير", discount: "توصيل مجاني للطلبات فوق 200 ريال", code: "JARIR" },
-            { id: 4, store: "نون", discount: "خصم 20% على الأزياء", code: "FASHION20" },
-            { id: 5, store: "إكسترا", discount: "خصم 50 ريال عند الشراء بـ 500 ريال", code: "EXTRA50" },
-            { id: 6, store: "أمازون", discount: "خصم 5% على البقالة", code: "GROCERY5" }
-        ];
+      <!-- Sort chips -->
+      <div class="flex gap-2 mb-4 overflow-x-auto pb-1">
+        <button class="chip active"><i class="fas fa-magic text-[10px] ml-1"></i>ترتيب ذكي</button>
+        <button class="chip"><i class="fas fa-arrow-down text-[10px] ml-1"></i>الأرخص سعراً</button>
+        <button class="chip"><i class="fas fa-fire text-[10px] ml-1"></i>الأعلى توفيراً</button>
+      </div>
 
-        // 2. جلب العناصر من الصفحة
-        const searchInput = document.getElementById('searchInput');
-        const resultsContainer = document.getElementById('resultsContainer');
+      <!-- Product cards grid -->
+      <div class="grid grid-cols-2 gap-3">
+        <div class="offer-card">
+          <div class="h-32 flex items-center justify-center relative" style="background:linear-gradient(145deg,#f5f5f5,#e5e7eb)">
+            <i class="fas fa-clock text-4xl" style="color:#9ca3af"></i>
+            <span class="absolute top-2 right-2 badge badge-new" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#1a1305;border:none">وفّر 400 ر.س</span>
+          </div>
+          <div class="p-3">
+            <div class="text-[10px] mb-1 flex items-center gap-1" style="color:var(--text-dim)">
+              <i class="fas fa-star" style="color:var(--gold-2)"></i>
+              4.8 (2100) • 1243 استخدام
+            </div>
+            <div class="font-bold text-sm mb-2">ساعة Galaxy Watch 6</div>
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-[10px] line-through" style="color:var(--text-dim)">1199 ر.س</span>
+              <span class="font-black gold-text">799 ر.س</span>
+            </div>
+            <button class="w-full py-2 rounded-xl text-[11px] font-bold" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#1a1305">اذهب للعرض</button>
+          </div>
+        </div>
 
-        // 3. دالة عرض النتائج
-        function displayResults(data) {
-            resultsContainer.innerHTML = ''; // تفريغ الحاوية أولاً
+        <div class="offer-card">
+          <div class="h-32 flex items-center justify-center relative" style="background:linear-gradient(145deg,#f5f5f5,#e5e7eb)">
+            <i class="fas fa-mobile-alt text-4xl" style="color:#9ca3af"></i>
+            <span class="absolute top-2 right-2 badge badge-new" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#1a1305;border:none">وفّر 500 ر.س</span>
+          </div>
+          <div class="p-3">
+            <div class="text-[10px] mb-1 flex items-center gap-1" style="color:var(--text-dim)">
+              <i class="fas fa-star" style="color:var(--gold-2)"></i>
+              4.8 (2100) • 1243 استخدام
+            </div>
+            <div class="font-bold text-sm mb-2">مكواة روبوت شاومي</div>
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-[10px] line-through" style="color:var(--text-dim)">1399 ر.س</span>
+              <span class="font-black gold-text">899 ر.س</span>
+            </div>
+            <button class="w-full py-2 rounded-xl text-[11px] font-bold" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#1a1305">اذهب للعرض</button>
+          </div>
+        </div>
 
-            if (data.length === 0) {
-                resultsContainer.innerHTML = '<div class="no-results">لا توجد نتائج مطابقة لبحثك 😔</div>';
-                return;
-            }
+        <div class="offer-card">
+          <div class="h-32 flex items-center justify-center relative" style="background:linear-gradient(145deg,#fef3c7,#fcd34d)">
+            <i class="fas fa-tv text-4xl" style="color:#78350f"></i>
+            <span class="absolute top-2 right-2 badge badge-new" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#1a1305;border:none">وفّر 800 ر.س</span>
+          </div>
+          <div class="p-3">
+            <div class="text-[10px] mb-1 flex items-center gap-1" style="color:var(--text-dim)">
+              <i class="fas fa-star" style="color:var(--gold-2)"></i>
+              4.7 (1800) • 980 استخدام
+            </div>
+            <div class="font-bold text-sm mb-2">تلفزيون سامسونج 55"</div>
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-[10px] line-through" style="color:var(--text-dim)">2300 ر.س</span>
+              <span class="font-black gold-text">1500 ر.س</span>
+            </div>
+            <button class="w-full py-2 rounded-xl text-[11px] font-bold" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#1a1305">اذهب للعرض</button>
+          </div>
+        </div>
 
-            // إنشاء بطاقة لكل كوبون
-            data.forEach(coupon => {
-                const card = document.createElement('div');
-                card.className = 'coupon-card';
-                card.innerHTML = `
-                    <div class="coupon-info">
-                        <h4>${coupon.store}</h4>
-                        <p>${coupon.discount}</p>
-                    </div>
-                    <div class="coupon-code">
-                        <div class="code-box">${coupon.code}</div>
-                        <button class="btn-copy" onclick="copyCode('${coupon.code}', this)">نسخ</button>
-                    </div>
-                `;
-                resultsContainer.appendChild(card);
-            });
-        }
+        <div class="offer-card">
+          <div class="h-32 flex items-center justify-center relative" style="background:linear-gradient(145deg,#f5f5f5,#e5e7eb)">
+            <i class="fas fa-headphones text-4xl" style="color:#9ca3af"></i>
+            <span class="absolute top-2 right-2 badge badge-new" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#1a1305;border:none">وفّر 250 ر.س</span>
+          </div>
+          <div class="p-3">
+            <div class="text-[10px] mb-1 flex items-center gap-1" style="color:var(--text-dim)">
+              <i class="fas fa-star" style="color:var(--gold-2)"></i>
+              4.9 (3200) • 2100 استخدام
+            </div>
+            <div class="font-bold text-sm mb-2">سماعات Sony WH-1000</div>
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-[10px] line-through" style="color:var(--text-dim)">1450 ر.س</span>
+              <span class="font-black gold-text">1200 ر.س</span>
+            </div>
+            <button class="w-full py-2 rounded-xl text-[11px] font-bold" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#1a1305">اذهب للعرض</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 
-        // 4. دالة نسخ الكود
-        function copyCode(code, btn) {
-            navigator.clipboard.writeText(code).then(() => {
-                const originalText = btn.innerText;
-                btn.innerText = 'تم النسخ!';
-                btn.style.background = '#10b981'; // لون أخضر
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.style.background = '#4f46e5'; // العودة للون الأصلي
-                }, 2000);
-            });
-        }
+<!-- ================= COUPONS TAB ================= -->
+<main id="tab-coupons" class="tab">
+  <section class="px-4 py-4">
+    <div class="max-w-md mx-auto">
+      <h2 class="text-xl font-black mb-1">الكوبونات</h2>
+      <p class="text-xs mb-4" style="color:var(--text-dim)">انسخ الكود واستخدمه عند الدفع</p>
 
-        // 5. مستمع الحدث للبحث
-        searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase().trim();
-            
-            // إذا كان البحث فارغاً، امسح النتائج
-            if (searchTerm === '') {
-                resultsContainer.innerHTML = '';
-                return;
-            }
+      <div class="space-y-3">
+        <div class="offer-card p-4 flex items-center gap-3">
+          <div class="w-14 h-14 rounded-2xl metal-bg flex items-center justify-center shrink-0">
+            <span class="text-xl font-black" style="color:#1a1305">N</span>
+          </div>
+          <div class="flex-1">
+            <div class="font-bold text-sm">نون</div>
+            <div class="text-[10px] mb-1" style="color:var(--text-dim)">خصم 20% على الإلكترونيات</div>
+            <div class="font-mono font-bold text-xs px-3 py-1.5 rounded-lg inline-block" style="background:rgba(212,160,23,0.1);color:var(--gold-2);border:1px dashed rgba(212,160,23,0.3)">NOON20</div>
+          </div>
+          <button onclick="copyCode('NOON20')" class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2))">
+            <i class="fas fa-copy text-xs" style="color:#1a1305"></i>
+          </button>
+        </div>
 
-            // فلترة الكوبونات بناءً على اسم المتجر أو الوصف
-            const filteredCoupons = coupons.filter(coupon => 
-                coupon.store.toLowerCase().includes(searchTerm) || 
-                coupon.discount.toLowerCase().includes(searchTerm)
-            );
+        <div class="offer-card p-4 flex items-center gap-3">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,#ef4444,#dc2626)">
+            <i class="fas fa-utensils text-white text-xl"></i>
+          </div>
+          <div class="flex-1">
+            <div class="font-bold text-sm">هنقرستيشن</div>
+            <div class="text-[10px] mb-1" style="color:var(--text-dim)">توصيل مجاني لأول طلب</div>
+            <div class="font-mono font-bold text-xs px-3 py-1.5 rounded-lg inline-block" style="background:rgba(212,160,23,0.1);color:var(--gold-2);border:1px dashed rgba(212,160,23,0.3)">FREE15</div>
+          </div>
+          <button onclick="copyCode('FREE15')" class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2))">
+            <i class="fas fa-copy text-xs" style="color:#1a1305"></i>
+          </button>
+        </div>
 
-            displayResults(filteredCoupons);
-        });
-    </script>
+        <div class="offer-card p-4 flex items-center gap-3">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,#a855f7,#7c3aed)">
+            <i class="fas fa-plane text-white text-xl"></i>
+          </div>
+          <div class="flex-1">
+            <div class="font-bold text-sm">فلاي ناس</div>
+            <div class="text-[10px] mb-1" style="color:var(--text-dim)">خصم 15% على الرحلات الداخلية</div>
+            <div class="font-mono font-bold text-xs px-3 py-1.5 rounded-lg inline-block" style="background:rgba(212,160,23,0.1);color:var(--gold-2);border:1px dashed rgba(212,160,23,0.3)">FLY15</div>
+          </div>
+          <button onclick="copyCode('FLY15')" class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2))">
+            <i class="fas fa-copy text-xs" style="color:#1a1305"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 
+<!-- ================= MAP TAB ================= -->
+<main id="tab-map" class="tab">
+  <section class="px-4 py-4">
+    <div class="max-w-md mx-auto">
+      <h2 class="text-xl font-black mb-1">خريطتي</h2>
+      <p class="text-xs mb-4" style="color:var(--text-dim)">أقرب العروض والفروع إليك</p>
+
+      <div class="grid grid-cols-2 gap-2 mb-4">
+        <select class="glass rounded-xl px-3 py-2.5 text-xs font-bold" style="color:var(--text)">
+          <option>جدة</option><option>الرياض</option><option>مكة المكرمة</option>
+        </select>
+        <select class="glass rounded-xl px-3 py-2.5 text-xs font-bold" style="color:var(--text)">
+          <option>5 كم</option><option>10 كم</option><option>25 كم</option>
+        </select>
+      </div>
+
+      <div class="rounded-2xl overflow-hidden relative" style="height:400px;background:linear-gradient(160deg,#1a1305,#0f0c06);border:1px solid rgba(212,160,23,0.2)">
+        <div class="absolute inset-0" style="background-image:linear-gradient(rgba(212,160,23,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(212,160,23,0.1) 1px,transparent 1px);background-size:40px 40px"></div>
+        <div class="absolute top-1/3 left-0 right-0 h-1" style="background:rgba(212,160,23,0.3)"></div>
+        <div class="absolute top-2/3 left-0 right-0 h-1" style="background:rgba(212,160,23,0.3)"></div>
+        <div class="absolute top-0 bottom-0 left-1/3 w-1" style="background:rgba(212,160,23,0.3)"></div>
+        <div class="absolute top-0 bottom-0 right-1/3 w-1" style="background:rgba(212,160,23,0.3)"></div>
+
+        <div class="absolute w-8 h-8 rounded-full flex items-center justify-center" style="top:25%;right:20%;background:linear-gradient(135deg,#ef4444,#dc2626);box-shadow:0 0 20px rgba(239,68,68,0.6)"><i class="fas fa-utensils text-white text-xs"></i></div>
+        <div class="absolute w-8 h-8 rounded-full flex items-center justify-center" style="top:40%;right:45%;background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 0 20px rgba(34,197,94,0.6)"><i class="fas fa-cart-plus text-white text-xs"></i></div>
+        <div class="absolute w-8 h-8 rounded-full flex items-center justify-center" style="top:60%;right:60%;background:linear-gradient(135deg,#3b82f6,#1d4ed8);box-shadow:0 0 20px rgba(59,130,246,0.6)"><i class="fas fa-laptop text-white text-xs"></i></div>
+        <div class="absolute w-8 h-8 rounded-full flex items-center justify-center" style="top:75%;right:30%;background:linear-gradient(135deg,#d4a017,#facc15);box-shadow:0 0 20px rgba(212,160,23,0.6)"><i class="fas fa-store text-white text-xs"></i></div>
+
+        <div class="absolute" style="top:50%;right:50%;transform:translate(50%,-50%)">
+          <div class="w-5 h-5 rounded-full" style="background:var(--gold-2);border:3px solid var(--bg);box-shadow:0 0 0 8px rgba(212,160,23,0.3),0 0 20px rgba(212,160,23,0.8)"></div>
+        </div>
+
+        <div class="absolute bottom-3 left-3 right-3 glass rounded-2xl p-3 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(239,68,68,0.2)"><i class="fas fa-utensils" style="color:#ef4444"></i></div>
+          <div class="flex-1">
+            <div class="font-bold text-xs">مطعم البيك - التحلية</div>
+            <div class="text-[10px]" style="color:var(--text-dim)">1.2 كم • مفتوح</div>
+          </div>
+          <button class="text-[10px] font-bold px-3 py-1.5 rounded-lg" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#1a1305">اذهب</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= LIST TAB (Stores) ================= -->
+<main id="tab-list" class="tab">
+  <section class="px-4 py-4">
+    <div class="max-w-md mx-auto">
+      <h2 class="text-xl font-black mb-1">كافة المتاجر</h2>
+      <p class="text-xs mb-4" style="color:var(--text-dim)">14 متجر في جدة • محدّث الآن</p>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div class="store-card"><div class="store-letter metal-bg">ن</div><div class="font-bold text-sm">نون</div><div class="text-[10px]" style="color:var(--text-dim)">تسوّق عام</div></div>
+        <div class="store-card"><div class="store-letter" style="background:linear-gradient(135deg,#f97316,#ea580c)"><span style="color:#fff">أ</span></div><div class="font-bold text-sm">أمازون</div><div class="text-[10px]" style="color:var(--text-dim)">عالمي</div></div>
+        <div class="store-card"><div class="store-letter metal-bg">ع</div><div class="font-bold text-sm">علي إكسبريس</div><div class="text-[10px]" style="color:var(--text-dim)">تسوّق عام</div></div>
+        <div class="store-card"><div class="store-letter" style="background:linear-gradient(135deg,#ef4444,#dc2626)"><span style="color:#fff">ه</span></div><div class="font-bold text-sm">هنقرستيشن</div><div class="text-[10px]" style="color:var(--text-dim)">مطاعم</div></div>
+        <div class="store-card"><div class="store-letter" style="background:linear-gradient(135deg,#ec4899,#db2777)"><span style="color:#fff">ش</span></div><div class="font-bold text-sm">شي إن</div><div class="text-[10px]" style="color:var(--text-dim)">أزياء</div></div>
+        <div class="store-card"><div class="store-letter" style="background:linear-gradient(135deg,#f97316,#ea580c)"><span style="color:#fff">ت</span></div><div class="font-bold text-sm">تيمو</div><div class="text-[10px]" style="color:var(--text-dim)">تسوّق عام</div></div>
+        <div class="store-card"><div class="store-letter" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)"><span style="color:#fff">ج</span></div><div class="font-bold text-sm">جرير</div><div class="text-[10px]" style="color:var(--text-dim)">إلكترونيات</div></div>
+        <div class="store-card"><div class="store-letter" style="background:linear-gradient(135deg,#eab308,#ca8a04)"><span style="color:#fff">إ</span></div><div class="font-bold text-sm">إكسترا</div><div class="text-[10px]" style="color:var(--text-dim)">إلكترونيات</div></div>
+        <div class="store-card"><div class="store-letter" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)"><span style="color:#fff">ب</span></div><div class="font-bold text-sm">بنده</div><div class="text-[10px]" style="color:var(--text-dim)">سوبرماركت</div></div>
+        <div class="store-card"><div class="store-letter" style="background:linear-gradient(135deg,#22c55e,#16a34a)"><span style="color:#fff">ك</span></div><div class="font-bold text-sm">كارفور</div><div class="text-[10px]" style="color:var(--text-dim)">سوبرماركت</div></div>
+        <div class="store-card"><div class="store-letter" style="background:linear-gradient(135deg,#06b6d4,#0891b2)"><span style="color:#fff">ن</span></div><div class="font-bold text-sm">نهدي</div><div class="text-[10px]" style="color:var(--text-dim)">سوبرماركت</div></div>
+        <div class="store-card"><div class="store-letter" style="background:linear-gradient(135deg,#f43f5e,#e11d48)"><span style="color:#fff">د</span></div><div class="font-bold text-sm">الدهدي</div><div class="text-[10px]" style="color:var(--text-dim)">تجارة</div></div>
+        <div class="store-card"><div class="store-letter" style="background:linear-gradient(135deg,#6366f1,#4f46e5)"><span style="color:#fff">ي</span></div><div class="font-bold text-sm">يو باي</div><div class="text-[10px]" style="color:var(--text-dim)">الخليج</div></div>
+        <div class="store-card"><div class="store-letter" style="background:linear-gradient(135deg,#0ea5e9,#0284c7)"><span style="color:#fff">م</span></div><div class="font-bold text-sm">متاجر رزد</div><div class="text-[10px]" style="color:var(--text-dim)">السعودية</div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= REWARDS TAB ================= -->
+<main id="tab-rewards" class="tab">
+  <section class="px-4 py-4">
+    <div class="max-w-md mx-auto">
+      <h2 class="text-xl font-black mb-1">جوائز حكيم</h2>
+      <p class="text-xs mb-4" style="color:var(--text-dim)">كن من أفضل الموفّرين واكسب نقاط ذهبية</p>
+
+      <div class="offer-card p-5 mb-4 text-center card-glow">
+        <div class="w-20 h-20 rounded-full metal-bg flex items-center justify-center mx-auto mb-3">
+          <i class="fas fa-crown text-3xl" style="color:#1a1305"></i>
+        </div>
+        <div class="text-3xl font-black gold-text mb-1">4,850</div>
+        <div class="text-xs mb-4" style="color:var(--text-dim)">نقاطك الذهبية</div>
+        <button class="px-6 py-2.5 rounded-xl font-bold text-sm" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#1a1305">استبدل النقاط</button>
+      </div>
+
+      <h3 class="font-bold text-sm mb-3">لوحة أفضل الموفّرين</h3>
+      <div class="space-y-2">
+        <div class="offer-card p-3 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl metal-bg flex items-center justify-center font-black" style="color:#1a1305">1</div>
+          <div class="flex-1"><div class="font-bold text-sm">أحمد الحربي</div><div class="text-[10px]" style="color:var(--text-dim)">جدة</div></div>
+          <div class="text-left"><div class="font-black gold-text">4,850</div><div class="text-[9px]" style="color:var(--text-dim)">نقطة</div></div>
+        </div>
+        <div class="offer-card p-3 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center font-black" style="background:#94a3b8;color:#1a1305">2</div>
+          <div class="flex-1"><div class="font-bold text-sm">سارة العتيبي</div><div class="text-[10px]" style="color:var(--text-dim)">الرياض</div></div>
+          <div class="text-left"><div class="font-black gold-text">3,920</div><div class="text-[9px]" style="color:var(--text-dim)">نقطة</div></div>
+        </div>
+        <div class="offer-card p-3 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center font-black" style="background:#b45309;color:#fff">3</div>
+          <div class="flex-1"><div class="font-bold text-sm">خالد القحطاني</div><div class="text-[10px]" style="color:var(--text-dim)">الدمام</div></div>
+          <div class="text-left"><div class="font-black gold-text">3,105</div><div class="text-[9px]" style="color:var(--text-dim)">نقطة</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= ASSISTANT TAB ================= -->
+<main id="tab-assistant" class="tab">
+  <section class="px-4 py-4">
+    <div class="max-w-md mx-auto">
+      <div class="offer-card p-5 mb-4 text-center card-glow">
+        <div class="w-20 h-20 rounded-full metal-bg flex items-center justify-center mx-auto mb-3 float" style="box-shadow:0 10px 40px rgba(212,160,23,0.5)">
+          <i class="fas fa-robot text-3xl" style="color:#1a1305"></i>
+        </div>
+        <div class="text-xl font-black gold-text mb-1">حكيم</div>
+        <div class="text-xs mb-3" style="color:var(--text-dim)">مساعدك الذكي لأفضل عروض المملكة</div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full" style="background:rgba(74,222,128,0.15)">
+          <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+          <span class="text-[10px] font-bold" style="color:#4ade80">متصل الآن</span>
+        </div>
+      </div>
+
+      <div class="space-y-2 mb-4">
+        <button class="offer-card p-4 flex items-center gap-3 w-full" onclick="askAI('أرخص أرز بسمتي')">
+          <i class="fas fa-shopping-cart" style="color:var(--gold-2)"></i>
+          <span class="flex-1 text-right text-sm font-bold">وين ألقى أرخص أرز بسمتي؟</span>
+          <i class="fas fa-chevron-left text-xs" style="color:var(--text-dim)"></i>
+        </button>
+        <button class="offer-card p-4 flex items-center gap-3 w-full" onclick="askAI('وفر عائلي')">
+          <i class="fas fa-users" style="color:var(--gold-2)"></i>
+          <span class="flex-1 text-right text-sm font-bold">أبي أوفر في وجبة عائلية</span>
+          <i class="fas fa-chevron-left text-xs" style="color:var(--text-dim)"></i>
+        </button>
+        <button class="offer-card p-4 flex items-center gap-3 w-full" onclick="askAI('مقارنة آيفون')">
+          <i class="fas fa-mobile-alt" style="color:var(--gold-2)"></i>
+          <span class="flex-1 text-right text-sm font-bold">قارن أسعار الآيفون</span>
+          <i class="fas fa-chevron-left text-xs" style="color:var(--text-dim)"></i>
+        </button>
+        <button class="offer-card p-4 flex items-center gap-3 w-full" onclick="askAI('صيدلية')">
+          <i class="fas fa-prescription-bottle" style="color:var(--gold-2)"></i>
+          <span class="flex-1 text-right text-sm font-bold">أفضل عروض الصيدلية اليوم</span>
+          <i class="fas fa-chevron-left text-xs" style="color:var(--text-dim)"></i>
+        </button>
+        <button class="offer-card p-4 flex items-center gap-3 w-full" onclick="askAI('عروض غذائية')">
+          <i class="fas fa-carrot" style="color:var(--gold-2)"></i>
+          <span class="flex-1 text-right text-sm font-bold">عروض المواد الغذائية هذا الأسبوع</span>
+          <i class="fas fa-chevron-left text-xs" style="color:var(--text-dim)"></i>
+        </button>
+      </div>
+
+      <div class="glass rounded-2xl p-2 flex items-center gap-2">
+        <input type="text" placeholder="اكتب سؤالك أو استخدم المايك..." class="flex-1 bg-transparent border-0 text-sm px-3 py-2" style="color:var(--text)">
+        <button class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2))">
+          <i class="fas fa-microphone text-sm" style="color:#1a1305"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= SETTINGS TAB ================= -->
+<main id="tab-settings" class="tab">
+  <section class="px-4 py-4">
+    <div class="max-w-md mx-auto">
+      <h2 class="text-xl font-black mb-1">الإعدادات</h2>
+      <p class="text-xs mb-5" style="color:var(--text-dim)">خصّص تجربتك</p>
+
+      <div class="offer-card p-4 mb-4">
+        <div class="font-bold text-sm mb-1">لون الثيم</div>
+        <div class="text-[10px] mb-3" style="color:var(--text-dim)">اختر الثيم المعدني المفضل</div>
+        <div class="grid grid-cols-3 gap-3">
+          <button class="p-3 rounded-xl text-xs font-bold active" onclick="setThemeFromSettings('gold',this)" style="background:linear-gradient(135deg,#d4a017,#facc15);color:#1a1305">ذهبي</button>
+          <button class="p-3 rounded-xl text-xs font-bold" onclick="setThemeFromSettings('silver',this)" style="background:linear-gradient(135deg,#e5e7eb,#9ca3af,#4b5563);color:#111">فضي</button>
+          <button class="p-3 rounded-xl text-xs font-bold" onclick="setThemeFromSettings('bronze',this)" style="background:linear-gradient(135deg,#fbbf24,#b45309,#78350f);color:#fff">برونزي</button>
+        </div>
+      </div>
+
+      <div class="offer-card p-4 mb-4">
+        <div class="font-bold text-sm mb-1">انحناء الزوايا</div>
+        <div class="flex items-center gap-3 mt-3">
+          <input type="range" min="0" max="40" value="24" oninput="setRadius(this.value)" class="flex-1" style="accent-color:var(--gold-2)">
+          <span id="radius-val" class="text-xs font-bold px-3 py-1.5 rounded-lg" style="background:rgba(212,160,23,0.1);color:var(--gold-2)">24px</span>
+        </div>
+      </div>
+
+      <div class="offer-card overflow-hidden">
+        <div class="p-4 flex items-center gap-3 border-b border-white/5">
+          <i class="fas fa-bell" style="color:var(--gold-2)"></i>
+          <span class="flex-1 text-sm font-bold">إشعارات العروض</span>
+          <div class="w-11 h-6 rounded-full relative" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2))"><div class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white"></div></div>
+        </div>
+        <div class="p-4 flex items-center gap-3 border-b border-white/5">
+          <i class="fas fa-moon" style="color:var(--gold-2)"></i>
+          <span class="flex-1 text-sm font-bold">الوضع الليلي</span>
+          <div class="w-11 h-6 rounded-full relative" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2))"><div class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white"></div></div>
+        </div>
+        <div class="p-4 flex items-center gap-3">
+          <i class="fas fa-globe" style="color:var(--gold-2)"></i>
+          <span class="flex-1 text-sm font-bold">اللغة</span>
+          <span class="text-xs" style="color:var(--text-dim)">العربية</span>
+        </div>
+      </div>
+      <div class="text-center text-[10px] mt-6" style="color:var(--text-dim)">HkeeemAI — الإصدار 1.0.0</div>
+    </div>
+  </section>
+</main>
+
+<!-- Bottom Nav -->
+<nav class="fixed bottom-0 inset-x-0 z-40" style="background:linear-gradient(180deg,rgba(10,8,5,0.9),rgba(10,8,5,0.98));backdrop-filter:blur(20px);border-top:1px solid rgba(212,160,23,0.15)">
+  <div class="max-w-md mx-auto flex items-center">
+    <div class="nav-item active" onclick="switchTab('home',this)"><i class="fas fa-home"></i><span>الرئيسية</span></div>
+    <div class="nav-item" onclick="switchTab('offers',this)"><i class="fas fa-tags"></i><span>العروض</span></div>
+    <div class="nav-item" onclick="switchTab('coupons',this)"><i class="fas fa-ticket-alt"></i><span>كوبونات</span></div>
+    <div class="nav-item" onclick="switchTab('map',this)"><i class="fas fa-map-marked-alt"></i><span>خريطتي</span></div>
+    <div class="nav-item" onclick="switchTab('list',this)"><i class="fas fa-list-ul"></i><span>قائمة</span></div>
+    <div class="nav-item" onclick="switchTab('rewards',this)"><i class="fas fa-trophy"></i><span>جوائز</span></div>
+    <div class="nav-item" onclick="switchTab('assistant',this)"><i class="fas fa-comments"></i><span>مساعد</span></div>
+  </div>
+</nav>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-28 left-1/2 -translate-x-1/2 px-5 py-3 rounded-xl text-sm font-bold z-50 hidden" style="background:linear-gradient(135deg,var(--gold-1),var(--gold-2));color:#1a1305;box-shadow:0 10px 30px rgba(212,160,23,0.5)"></div>
+
+<script>
+const themes = {
+  gold: { c1:'#d4a017', c2:'#facc15', c3:'#8b6914', bg:'#0a0805', dim:'#a89570' },
+  silver: { c1:'#6b7280', c2:'#e5e7eb', c3:'#1f2937', bg:'#0a0a0c', dim:'#9ca3af' },
+  bronze: { c1:'#b45309', c2:'#fbbf24', c3:'#78350f', bg:'#0c0805', dim:'#a8825c' }
+};
+
+function applyTheme(t){
+  const th = themes[t];
+  document.documentElement.style.setProperty('--gold-1', th.c1);
+  document.documentElement.style.setProperty('--gold-2', th.c2);
+  document.documentElement.style.setProperty('--gold-3', th.c3);
+  document.documentElement.style.setProperty('--bg', th.bg);
+  document.documentElement.style.setProperty('--text-dim', th.dim);
+  localStorage.setItem('hkeeem-theme', t);
+}
+
+function setTheme(t, el){
+  applyTheme(t);
+  document.querySelectorAll('.color-option').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  showToast('✓ تم تطبيق الثيم');
+}
+
+function setThemeFromSettings(t, el){
+  applyTheme(t);
+  document.querySelectorAll('#tab-settings button').forEach(b=>b.style.opacity='1');
+  document.querySelectorAll('#tab-settings button').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  showToast('✓ تم تطبيق الثيم');
+}
+
+function setRadius(v){
+  document.documentElement.style.setProperty('--radius', v+'px');
+  document.getElementById('radius-val').textContent = v+'px';
+}
+
+function switchTab(name, el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  if(el) el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function openMenu(){
+  document.getElementById('sideMenu').classList.add('open');
+  document.getElementById('menuOverlay').classList.add('open');
+}
+function closeMenu(){
+  document.getElementById('sideMenu').classList.remove('open');
+  document.getElementById('menuOverlay').classList.remove('open');
+}
+
+function copyCode(code){
+  navigator.clipboard.writeText(code).then(()=>showToast('✓ تم نسخ: '+code)).catch(()=>showToast('الكود: '+code));
+}
+
+function quickSearch(q){ showToast('🔍 بحث: '+q); }
+
+function askAI(q){
+  switchTab('assistant');
+  setTimeout(()=>showToast('🤖 جاري البحث عن: '+q), 300);
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.remove('hidden');
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.classList.add('hidden'), 2000);
+}
+
+// Load saved theme
+const saved = localStorage.getItem('hkeeem-theme');
+if(saved) applyTheme(saved);
+
+// Chips
+document.querySelectorAll('.chip').forEach(c=>{
+  c.addEventListener('click',function(){
+    this.parentElement.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
 </body>
 </html>
